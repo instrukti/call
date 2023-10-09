@@ -33,7 +33,7 @@
           />
         </div>
       {/if}
-      <div class="h-full flex flex-col {$isCallMaximized ? 'xl:w-full' : $isWhiteboardHidden && !$isChatHidden ? 'xl:w-2/3' : 'xl:w-1/3'} max-w-full" transition:slide={{ axis: "x" }}>
+      <div class="h-full flex flex-col w-full {$isCallMaximized ? 'xl:w-full' : $isWhiteboardHidden && !$isChatHidden ? 'xl:w-2/3' : 'xl:w-1/3'} max-w-full" transition:slide={{ axis: "x" }}>
         <CallContainer on:maximize={maximizeCall} on:minimize={minimizeCall} />
       </div>
       {#if !$isWhiteboardHidden}
