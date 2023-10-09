@@ -8,15 +8,25 @@
   import { isCallMaximized, isChatHidden, isWhiteboardHidden, isWhiteboardMaximized, maximizeCall, maximizeWhiteboard, minimizeCall, minimizeWhiteboard } from "./lib/stores/visibility";
   import Screenshot from "./lib/components/Screenshot.svelte";
   import { showScreenCaptureModal } from "./lib/utils/fabric_utils";
+  import LoadingOverlay from "./lib/components/LoadingOverlay.svelte";
+  import { onMount } from "svelte";
+  let loading = true;
+  onMount(() => {
+    window.onload = () => {
+      loading = false;
+    };
+  });
 </script>
 
 <svelte:head>
   <link rel="stylesheet" href={tabler} />
   <title>Instrukti Call</title>
 </svelte:head>
-
+{#if loading}
+  <LoadingOverlay />
+{/if}
 {#if $showScreenCaptureModal}
-  <div class="w-100v h-100v z-[9999] overflow-hidden">
+  <div class="w-100v h-100v z-[100] overflow-hidden">
     <Screenshot />
   </div>
 {/if}

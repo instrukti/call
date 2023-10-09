@@ -70,10 +70,10 @@
 </script>
 
 <div class="{$showScreenCaptureModal ? 'fixed' : 'hidden'} w-100v h-100v top-0 left-0 cursor-crosshair bg-contain bg-no-repeat bg-center" id="screenshotContainer" bind:this={container}>
-  <div class="fixed top-4 left-1/2 w-48 -ml-24 text-white bg-slate-700 rounded-lg flex items-center justify-start p-4 space-y-4 z-[9999]">Press 'ESC' to exit.</div>
+  <div class="fixed top-4 left-1/2 w-48 -ml-24 text-white bg-slate-700 rounded-lg flex items-center justify-start p-4 space-y-4 z-[100]">Press 'ESC' to exit.</div>
   <canvas id="capturedStill" />
   <canvas id="cropped" />
-  <div class="fixed !z-[8888] cursor-crosshair {$showScreenCaptureModal ? 'border-red-600' : ''}" id="overlay" bind:this={overlay} />
+  <div class="fixed !z-[50] cursor-crosshair {$showScreenCaptureModal ? 'border-red-600' : ''}" id="overlay" bind:this={overlay} />
 </div>
 
 <style>
