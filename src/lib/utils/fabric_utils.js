@@ -41,6 +41,7 @@ export class FabricUtils {
       this.canvas.loadFromJSON(get(boardDataJSON), async () => {});
     }
     this.setZoom();
+    this.defineModifiedListener();
   }
   clearBoard = () => {
     this.canvas.clear();
@@ -49,6 +50,11 @@ export class FabricUtils {
   resetZoom = () => {
     this.resetEvents();
     this.canvas.setZoom(1);
+  };
+  defineModifiedListener = () => {
+    this.canvas.on("object:modified", () => {
+      this.saveBoard();
+    });
   };
   resetEvents = () => {
     activeButton.set("select");
@@ -66,6 +72,7 @@ export class FabricUtils {
       this.subscribeToStrokeColor();
     }
     this.setZoom();
+    this.defineModifiedListener();
   };
   setZoom = () => {
     this.canvas.on("mouse:wheel", (opt) => {
