@@ -23,6 +23,7 @@ export class FabricUtils {
       if (e.key === "Delete") {
         this.canvas.getActiveObjects().forEach((obj) => {
           this.canvas.remove(obj);
+          this.saveBoard();
         });
       }
     };
@@ -93,7 +94,9 @@ export class FabricUtils {
       // @ts-ignore
       this.canvas.freeDrawingBrush = new fabric.EraserBrush(this.canvas);
       this.canvas.isDrawingMode = true;
-      this.canvas.freeDrawingBrush.width = 30;
+      this.subscribeToStrokeWidth = strokeWidth.subscribe((val) => {
+        this.canvas.freeDrawingBrush.width = val * 3;
+      });
     }, 100);
     this.canvas.on("mouse:up", () => {
       this.saveBoard();

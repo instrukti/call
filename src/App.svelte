@@ -31,14 +31,14 @@
   </div>
 {/if}
 <div class="w-100v h-100v bg-white p-2 overflow-hidden">
-  <div class="flex flex-col h-full w-full border-2 border-black rounded-xl">
+  <div class="h-full w-full border-2 border-black rounded-xl">
     <div class="h-full w-full flex gap-4">
       {#if !$isChatHidden}
         <div class="h-full hidden w-1/3 xl:flex" transition:slide={{ axis: "x" }}>
           <ChatContainer
             on:hideChat={() => {
               $isChatHidden = true;
-              if ($isWhiteboardHidden) $isCallMaximized = true;
+              $isWhiteboardHidden ? ($isCallMaximized = true) : ($isWhiteboardMaximized = true);
             }}
           />
         </div>
