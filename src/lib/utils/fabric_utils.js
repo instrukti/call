@@ -349,10 +349,8 @@ export class FabricUtils {
       });
     }, 100);
   };
-  finishTakingScreenshot = (/** @type {string} */ imageData) => {
-    let base64String = imageData;
+  finishTakingScreenshot = (/** @type {string} */ base64String) => {
     fabric.Image.fromURL(base64String, (image) => {
-      console.log(base64String);
       image.set({
         left: 100,
         top: 100,

@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { FabricUtils, fabricUtilsStore, showScreenCaptureModal } from "../utils/fabric_utils";
+  import { Alert, El, Toast, ToastBody, ToastContainer, ToastHeader } from "yesvelte";
 
   let container;
   let overlay;
@@ -50,39 +51,29 @@
       /** @type {FabricUtils}*/
       const fabricUtils = $fabricUtilsStore;
       fabricUtils.finishTakingScreenshot(finalImage);
-      // // invoke screen capture area
-      // await invoke("capture_area", { x: rectLeft, y: rectTop, width: rectWidth, height: rectHeight });
-      // const imageData = await readBinaryFile("InstruktiFiles/screenshot.png", { dir: BaseDirectory.Document });
-      // const base64String = _arrayBufferToBase64(imageData);
-      // await finishTakingScreenshot(base64String, canvas);
-      // overlay.style.top = "0px";
-      // overlay.style.left = "0px";
-      // overlay.style.width = "0px";
-      // overlay.style.height = "0px";
-      // takingScreenshot.set(false);
     });
   });
   const exitScreenshot = async (event) => {
     if (event.code === "Escape") {
       document.body.style.cursor = "auto";
-      // takingScreenshot.set(false);
+      showScreenCaptureModal.set(false);
       container.style.backgroundImage = "none";
     }
   };
-
-  // takingScreenshot.subscribe((val) => {
-  //   if (val) {
-  //     window.addEventListener("keydown", exitScreenshot);
-  //     return;
-  //   }
-  //   window.removeEventListener("keydown", exitScreenshot);
-  // });
+  showScreenCaptureModal.subscribe((val) => {
+    if (val) {
+      window.addEventListener("keydown", exitScreenshot);
+      return;
+    }
+    window.removeEventListener("keydown", exitScreenshot);
+  });
 </script>
 
 <div class="{$showScreenCaptureModal ? 'fixed' : 'hidden'} w-100v h-100v top-0 left-0 cursor-crosshair bg-contain bg-no-repeat bg-center" id="screenshotContainer" bind:this={container}>
+  <div class="fixed top-4 left-1/2 w-48 -ml-24 text-white bg-slate-700 rounded-lg flex items-center justify-start p-4 space-y-4 z-[9999]">Press 'ESC' to exit.</div>
   <canvas id="capturedStill" />
   <canvas id="cropped" />
-  <div class="fixed !z-[9999] cursor-crosshair {$showScreenCaptureModal ? 'border-red-600' : ''}" id="overlay" bind:this={overlay} />
+  <div class="fixed !z-[8888] cursor-crosshair {$showScreenCaptureModal ? 'border-red-600' : ''}" id="overlay" bind:this={overlay} />
 </div>
 
 <style>

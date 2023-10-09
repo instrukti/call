@@ -1,9 +1,10 @@
 <script>
   import { createEventDispatcher, onMount } from "svelte";
-  import { Button, Card, CardBody, CardHeader, CardTitle, El, Icon, Modal, ModalBody, ModalFooter, Popover, PopoverBody, PopoverHeader, Tooltip } from "yesvelte";
+  import { Button, Card, CardBody, CardHeader, CardTitle, El, Icon, Popover, PopoverBody, PopoverHeader, Slider, SliderKnob, Tooltip } from "yesvelte";
   import { isCallMaximized, isChatHidden, isWhiteboardMaximized } from "../stores/visibility";
   import { fabric } from "fabric";
-  import { FabricUtils, activeButton, fabricUtilsStore } from "../utils/fabric_utils";
+  import { FabricUtils, activeButton, fabricUtilsStore, strokeColor, strokeWidth } from "../utils/fabric_utils";
+  import ColorPicker from "svelte-awesome-color-picker";
   let board;
   /** @type {HTMLCanvasElement}*/
   let canvas;
@@ -63,73 +64,82 @@
             <Popover trigger="hover">
               <PopoverHeader>Select Tool</PopoverHeader>
               <PopoverBody>
-                <div class="grid grid-cols-3 gap-2">
+                <div class="grid grid-cols-3 gap-2 place-items-center">
                   <div>
                     <Button color={$activeButton === "select" ? "dark" : ""} on:click={fabricUtils.resetEvents}>
                       <Icon name="pointer-filled" />
                     </Button>
-                    <Tooltip placement="top">Select</Tooltip>
+                    <Tooltip placement="left">Select</Tooltip>
                   </div>
                   <div>
                     <Button color={$activeButton === "move" ? "dark" : ""} on:click={fabricUtils.enterDragMode}>
                       <Icon name="arrows-move" />
                     </Button>
-                    <Tooltip placement="top">Move</Tooltip>
+                    <Tooltip placement="left">Move</Tooltip>
                   </div>
                   <div>
                     <Button on:click={fabricUtils.resetZoom}>
                       <Icon name="zoom-reset" />
                     </Button>
-                    <Tooltip placement="top">Reset Zoom</Tooltip>
+                    <Tooltip placement="left">Reset Zoom</Tooltip>
                   </div>
                   <div>
                     <Button color={$activeButton === "eraser" ? "dark" : ""} on:click={fabricUtils.activateEraser}>
                       <Icon name="eraser" />
                     </Button>
-                    <Tooltip placement="top">Eraser</Tooltip>
+                    <Tooltip placement="left">Eraser</Tooltip>
                   </div>
                   <div>
                     <Button on:click={fabricUtils.startTakingScreenshot}>
                       <Icon name="screenshot" />
                     </Button>
-                    <Tooltip placement="top">Screenshot</Tooltip>
+                    <Tooltip placement="left">Screenshot</Tooltip>
                   </div>
                   <div>
                     <Button color={$activeButton === "line" ? "dark" : ""} on:click={fabricUtils.drawline}>
                       <Icon name="slash" />
                     </Button>
-                    <Tooltip placement="top">Line</Tooltip>
+                    <Tooltip placement="left">Line</Tooltip>
                   </div>
                   <div>
                     <Button color={$activeButton === "freeform" ? "dark" : ""} on:click={fabricUtils.drawFreeform}>
                       <Icon name="scribble" />
                     </Button>
-                    <Tooltip placement="top">Scribble</Tooltip>
+                    <Tooltip placement="left">Scribble</Tooltip>
                   </div>
                   <div>
                     <Button color={$activeButton === "circle" ? "dark" : ""} on:click={fabricUtils.drawCircle}>
                       <Icon name="circle" />
                     </Button>
-                    <Tooltip placement="top">Circle</Tooltip>
+                    <Tooltip placement="left">Circle</Tooltip>
                   </div>
                   <div>
                     <Button color={$activeButton === "rect" ? "dark" : ""} on:click={fabricUtils.drawRect}>
                       <Icon name="rectangle" />
                     </Button>
-                    <Tooltip placement="top">Rectangle</Tooltip>
+                    <Tooltip placement="left">Rectangle</Tooltip>
                   </div>
                   <div>
                     <Button on:click={() => fabricUtils.addText()}>
                       <Icon name="typography" />
                     </Button>
-                    <Tooltip placement="top">Text</Tooltip>
+                    <Tooltip placement="left">Text</Tooltip>
                   </div>
                   <div>
                     <Button color="warning" on:click={fabricUtils.clearBoard}>
                       <Icon name="trash-filled" />
                     </Button>
-                    <Tooltip placement="top">Clear</Tooltip>
+                    <Tooltip placement="left">Clear</Tooltip>
                   </div>
+                </div>
+                <div>
+                  <Slider min={2} max={16} step={2}>
+                    <SliderKnob bind:value={$strokeWidth} />
+                  </Slider>
+                  <i>Stroke WIdth: {$strokeWidth}</i>
+                </div>
+                <div class="mt-2">
+                  <ColorPicker bind:hex={$strokeColor} isOpen isPopup={false} isInput={false} />
                 </div>
               </PopoverBody>
             </Popover>
