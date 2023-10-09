@@ -7,6 +7,7 @@ export const strokeColor = writable("#000000");
 export const activeButton = writable("select");
 export const showScreenCaptureModal = writable(false);
 export const fabricUtilsStore = writable(null);
+export const boardDataJSON = writable(null);
 export class FabricUtils {
   isDrawing = writable(false);
   /** @type {import("svelte/store").Unsubscriber | null} */
@@ -18,7 +19,6 @@ export class FabricUtils {
     this.isDrawing.subscribe((val) => {
       this.setFixed(val);
     });
-    this.setZoom();
     document.onkeydown = (e) => {
       if (e.key === "Delete") {
         this.canvas.getActiveObjects().forEach((obj) => {
@@ -37,6 +37,10 @@ export class FabricUtils {
         this.pasteItem(type);
       }
     });
+    if (get(boardDataJSON)) {
+      this.canvas.loadFromJSON(get(boardDataJSON), async () => {});
+    }
+    this.setZoom();
   }
   clearBoard = () => {
     this.canvas.clear();
@@ -84,6 +88,9 @@ export class FabricUtils {
       this.canvas.isDrawingMode = true;
       this.canvas.freeDrawingBrush.width = 30;
     }, 100);
+    this.canvas.on("mouse:up", () => {
+      this.saveBoard();
+    });
   };
   drawline = (/** @type {any} */ e) => {
     this.resetEvents();
@@ -113,6 +120,7 @@ export class FabricUtils {
 
       this.canvas.on("mouse:up", () => {
         this.isDrawing.set(false);
+        this.saveBoard();
       });
     }, 100);
   };
@@ -156,6 +164,7 @@ export class FabricUtils {
 
       this.canvas.on("mouse:up", () => {
         this.isDrawing.set(false);
+        this.saveBoard();
       });
     }, 100);
   };
@@ -198,6 +207,7 @@ export class FabricUtils {
 
       this.canvas.on("mouse:up", () => {
         this.isDrawing.set(false);
+        this.saveBoard();
       });
     }, 100);
   };
@@ -219,6 +229,7 @@ export class FabricUtils {
       });
       this.canvas.on("mouse:up", () => {
         this.isDrawing.set(false);
+        this.saveBoard();
       });
     }, 100);
   };
@@ -233,6 +244,7 @@ export class FabricUtils {
         fill: get(strokeColor),
       });
       this.canvas.add(text);
+      this.saveBoard();
     }, 100);
   };
   pasteItem = (/** @type {string | null} */ type = null) => {
@@ -287,6 +299,7 @@ export class FabricUtils {
     }, 100);
   };
   saveBoard = debounce(() => {
+    boardDataJSON.set(this.canvas.toJSON());
     // To be implemented when pocketbase backend is started
   });
   setFixed = (/** @type {Boolean} */ isFixed) => {
@@ -339,6 +352,7 @@ export class FabricUtils {
       });
       this.canvas.add(image);
       this.canvas.renderAll();
+      this.saveBoard();
     });
   };
 }
