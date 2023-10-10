@@ -8,7 +8,7 @@ export class LivekitUtils {
   /** @type {Room} */
   room;
   /** @type {string} */
-  wsURL = "wss://instrukti-nf5brd5y.livekit.cloud";
+  wsURL = "ws://localhost:7880";
   /** @type {string} */
   token;
   /** @type {HTMLMediaElement} */
@@ -22,12 +22,11 @@ export class LivekitUtils {
   joinRoom = async () => {
     await this.room.connect(this.wsURL, this.token);
     await this.room.localParticipant.enableCameraAndMicrophone();
+    await this.muteMic();
+    await this.turnVideoOff();
+  };
+  subscribeToEvents = async () => {
     await this.room.on("trackSubscribed", this.trackSubscription);
-    console.log(this.room.participants.size);
-    videoResolutions.subscribe(() => {
-      this.turnVideoOff();
-      this.turnVideoOn();
-    });
   };
   leaveRoom = async () => {
     await this.room.disconnect();
@@ -62,7 +61,7 @@ export class LivekitUtils {
       const parentElement = document.getElementById(participant.sid);
       const element = track.attach();
       parentElement.appendChild(element);
-    });
+    }, 500);
   };
   setLocalView = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });

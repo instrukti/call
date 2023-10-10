@@ -1,11 +1,14 @@
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { Avatar, Button, Card, CardBody, CardHeader, CardTitle, Dot, El, Icon, Offcanvas, OffcanvasBody, OffcanvasHeader, Status, Tooltip } from "yesvelte";
   import TimerModal from "./TimerModal.svelte";
   import ReactionDropdown from "./ReactionDropdown.svelte";
   import { isChatHidden, isCallMaximized, isWhiteboardHidden, isWhiteboardMaximized } from "../stores/visibility";
   import { slide } from "svelte/transition";
   import ChatBody from "./ChatBody.svelte";
+  import { LivekitUtils, remoteParticipants } from "../utils/livekit_utils";
+  /** @type {LivekitUtils}*/
+  let livekitUtils;
   let showChatCanvas = false;
   let isMicOn = true;
   let isVideoOn = false;
@@ -18,9 +21,11 @@
     switch (button) {
       case "mic":
         isMicOn = !isMicOn;
+        isMicOn ? livekitUtils.unMuteMic() : livekitUtils.muteMic();
         break;
       case "video":
         isVideoOn = !isVideoOn;
+        isVideoOn ? livekitUtils.turnVideoOn() : livekitUtils.turnVideoOff();
         break;
       case "hand":
         isHandRaised = !isHandRaised;
@@ -32,6 +37,15 @@
   const dispatch = createEventDispatcher();
   const maximize = () => dispatch("maximize");
   const minimize = () => dispatch("minimize");
+  onMount(() => {
+    let token = new URL(window.location.href).searchParams.get("token");
+    console.log(token);
+    setTimeout(async () => {
+      livekitUtils = new LivekitUtils(localViewContainer, token);
+      await livekitUtils.joinRoom();
+      await livekitUtils.subscribeToEvents();
+    }, 500);
+  });
 </script>
 
 <Card class="m-4 h-full flex-grow !rounded-2xl">
@@ -150,10 +164,9 @@
           </div>
         </div>
         <div class="flex flex-col justify-between">
-          <div><Avatar shape="circle" color="azure" class="!w-20 !h-20 md:!w-32 md:!h-32 !text-3xl">JD</Avatar></div>
-          <div><Avatar shape="circle" color="azure" class="!w-20 !h-20 md:!w-32 md:!h-32 !text-3xl">JD</Avatar></div>
-          <div><Avatar shape="circle" color="azure" class="!w-20 !h-20 md:!w-32 md:!h-32 !text-3xl">JD</Avatar></div>
-          <div><Avatar shape="circle" color="azure" class="!w-20 !h-20 md:!w-32 md:!h-32 !text-3xl">JD</Avatar></div>
+          {#each $remoteParticipants as participant, i}
+            <div><Avatar id={participant.sid} shape="circle" color="azure" class="!w-20 !h-20 md:!w-32 md:!h-32 !text-3xl">JD</Avatar></div>
+          {/each}
         </div>
       </div>
     </div>
