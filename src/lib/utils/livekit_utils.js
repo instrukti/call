@@ -18,7 +18,6 @@ export class LivekitUtils {
     this.setLocalView();
     this.room = new Room();
     this.token = token;
-    this.joinRoom();
   }
   joinRoom = async () => {
     await this.room.connect(this.wsURL, this.token);

@@ -1,14 +1,11 @@
 <script>
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import { Avatar, Button, Card, CardBody, CardHeader, CardTitle, Dot, El, Icon, Offcanvas, OffcanvasBody, OffcanvasHeader, Status, Tooltip } from "yesvelte";
   import TimerModal from "./TimerModal.svelte";
   import ReactionDropdown from "./ReactionDropdown.svelte";
   import { isChatHidden, isCallMaximized, isWhiteboardHidden, isWhiteboardMaximized } from "../stores/visibility";
   import { slide } from "svelte/transition";
   import ChatBody from "./ChatBody.svelte";
-  import { LivekitUtils, remoteParticipants } from "../utils/livekit_utils";
-  /** @type {LivekitUtils}*/
-  let livekitUtils;
   let showChatCanvas = false;
   let isMicOn = true;
   let isVideoOn = false;
@@ -24,7 +21,6 @@
         break;
       case "video":
         isVideoOn = !isVideoOn;
-        isVideoOn ? livekitUtils.turnVideoOn() : livekitUtils.turnVideoOff();
         break;
       case "hand":
         isHandRaised = !isHandRaised;
@@ -36,12 +32,6 @@
   const dispatch = createEventDispatcher();
   const maximize = () => dispatch("maximize");
   const minimize = () => dispatch("minimize");
-
-  onMount(() => {
-    setTimeout(() => {
-      livekitUtils = new LivekitUtils(localViewContainer, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTY5NjAyMzgsImlzcyI6IkFQSUJDNnBpZmZCcUhFSyIsIm5iZiI6MTY5Njg3MzgzOCwic3ViIjoicXVpY2tzdGFydCB1c2VyIHVsNTdvaCIsInZpZGVvIjp7ImNhblB1Ymxpc2giOnRydWUsImNhblB1Ymxpc2hEYXRhIjp0cnVlLCJjYW5TdWJzY3JpYmUiOnRydWUsInJvb20iOiJxdWlja3N0YXJ0IHJvb20iLCJyb29tSm9pbiI6dHJ1ZX19.CXpszwstL0SXDELGuOl7rVX21KKTlXzjqZoWwSxt-Fs");
-    }, 500);
-  });
 </script>
 
 <Card class="m-4 h-full flex-grow !rounded-2xl">
@@ -160,9 +150,10 @@
           </div>
         </div>
         <div class="flex flex-col justify-between">
-          {#each $remoteParticipants as participant, i}
-            <div><Avatar id={participant.sid} shape="circle" color="azure" class="!w-20 !h-20 md:!w-32 md:!h-32 !text-3xl">JD</Avatar></div>
-          {/each}
+          <div><Avatar shape="circle" color="azure" class="!w-20 !h-20 md:!w-32 md:!h-32 !text-3xl">JD</Avatar></div>
+          <div><Avatar shape="circle" color="azure" class="!w-20 !h-20 md:!w-32 md:!h-32 !text-3xl">JD</Avatar></div>
+          <div><Avatar shape="circle" color="azure" class="!w-20 !h-20 md:!w-32 md:!h-32 !text-3xl">JD</Avatar></div>
+          <div><Avatar shape="circle" color="azure" class="!w-20 !h-20 md:!w-32 md:!h-32 !text-3xl">JD</Avatar></div>
         </div>
       </div>
     </div>
