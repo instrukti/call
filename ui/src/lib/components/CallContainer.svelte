@@ -39,12 +39,13 @@
   const minimize = () => dispatch("minimize");
   onMount(() => {
     let token = new URL(window.location.href).searchParams.get("token");
-    console.log(token);
-    setTimeout(async () => {
-      livekitUtils = new LivekitUtils(localViewContainer, token);
-      await livekitUtils.joinRoom();
-      await livekitUtils.subscribeToEvents();
-    }, 500);
+    if (token) {
+      setTimeout(async () => {
+        livekitUtils = new LivekitUtils(localViewContainer, token);
+        await livekitUtils.joinRoom();
+        await livekitUtils.subscribeToEvents();
+      }, 500);
+    }
   });
 </script>
 
@@ -165,7 +166,7 @@
         </div>
         <div class="flex flex-col justify-between">
           {#each $remoteParticipants as participant, i}
-            <div><Avatar id={participant.sid} shape="circle" color="azure" class="!w-20 !h-20 md:!w-32 md:!h-32 !text-3xl">JD</Avatar></div>
+            <div><Avatar id={participant.sid} shape="circle" color="azure" class="!w-20 !h-20 md:!w-32 md:!h-32 !text-3xl" /></div>
           {/each}
         </div>
       </div>

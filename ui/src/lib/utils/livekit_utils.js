@@ -55,12 +55,19 @@ export class LivekitUtils {
     await this.room.localParticipant.setScreenShareEnabled(false);
   };
   trackSubscription = async (/** @type {import('livekit-client').RemoteTrack} */ track, /** @type {import('livekit-client').RemoteTrackPublication} */ publication, /** @type {import('livekit-client').RemoteParticipant} */ participant) => {
+    const element = track.attach();
     const participants = Array.from(this.room.participants.values());
     remoteParticipants.set(participants);
     setTimeout(() => {
+      element.id = track.kind + "_" + participant.identity;
+      element.classList.add("object-cover");
+      element.classList.add("rounded-full");
+      element.classList.add("!w-20");
+      element.classList.add("!h-20");
+      element.classList.add("md:!w-32");
+      element.classList.add("md:!h-32");
       const parentElement = document.getElementById(participant.sid);
-      const element = track.attach();
-      parentElement.appendChild(element);
+      if (parentElement) parentElement.appendChild(element);
     }, 500);
   };
   setLocalView = async () => {
