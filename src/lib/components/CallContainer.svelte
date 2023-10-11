@@ -129,13 +129,13 @@
                 <Button color={isMicOn ? "primary" : "red"} on:click={() => toggle("mic")} class="!rounded-full md:!w-14 md:!h-14">
                   <Icon name={isMicOn ? "microphone" : "microphone-off"} />
                 </Button>
-                <Tooltip text="{isMicOn ? 'Off' : 'On'} Mic" />
+                <Tooltip text="Mic {isMicOn ? 'On' : 'Off'}" />
               </div>
               <div transition:slide={{ axis: "y", delay: 80 }}>
                 <Button color={isVideoOn ? "primary" : "red"} on:click={() => toggle("video")} class="!rounded-full md:!w-14 md:!h-14">
                   <Icon name={isVideoOn ? "video" : "video-off"} />
                 </Button>
-                <Tooltip text="{isVideoOn ? 'Off' : 'On'} Camera" />
+                <Tooltip text="Camera {isVideoOn ? 'On' : 'Off'}" />
               </div>
               <div transition:slide={{ axis: "y", delay: 60 }}>
                 <Button color={isHandRaised ? "red" : "primary"} on:click={() => toggle("hand")} class="!rounded-full md:!w-14 md:!h-14">
@@ -174,7 +174,7 @@
 </Card>
 <Offcanvas bind:show={showChatCanvas} autoClose backdrop>
   <OffcanvasHeader title="Offcanvas Title" />
-  <OffcanvasBody class="h-100v flex flex-col p-4">
+  <OffcanvasBody class="h-[100dvh] flex flex-col p-4">
     <ChatBody />
   </OffcanvasBody>
 </Offcanvas>

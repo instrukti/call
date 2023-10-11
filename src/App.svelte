@@ -26,11 +26,11 @@
   <LoadingOverlay />
 {/if}
 {#if $showScreenCaptureModal}
-  <div class="w-100v h-100v z-[100] overflow-hidden">
+  <div class="w-[100dvw] h-[100dvh] z-[100] overflow-hidden">
     <Screenshot />
   </div>
 {/if}
-<div class="w-100v h-100v bg-white p-2 overflow-hidden">
+<div class="w-[100dvw] h-[100dvh] bg-white p-2 overflow-hidden">
   <div class="h-full w-full border-2 border-black rounded-xl">
     <div class="h-full w-full flex gap-4">
       {#if !$isChatHidden}

@@ -1,4 +1,4 @@
-<div class="w-100v h-100v z-[200] bg-slate-600 grid place-items-center">
+<div class="w-[100dvw] h-[100dvh] z-[200] bg-slate-600 grid place-items-center">
   <div class="loader" />
 </div>
 
