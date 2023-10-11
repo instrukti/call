@@ -10,7 +10,7 @@
   /** @type {LivekitUtils}*/
   let livekitUtils;
   let showChatCanvas = false;
-  let isMicOn = true;
+  let isMicOn = false;
   let isVideoOn = false;
   let isHandRaised = false;
   let recording = false;

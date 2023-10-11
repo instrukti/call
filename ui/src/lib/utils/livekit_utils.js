@@ -27,6 +27,7 @@ export class LivekitUtils {
   };
   subscribeToEvents = async () => {
     await this.room.on("trackSubscribed", this.trackSubscription);
+    await this.room.on("trackUnsubscribed", this.trackUnsubscription);
   };
   leaveRoom = async () => {
     await this.room.disconnect();
@@ -69,6 +70,11 @@ export class LivekitUtils {
       const parentElement = document.getElementById(participant.sid);
       if (parentElement) parentElement.appendChild(element);
     }, 500);
+  };
+  trackUnsubscription = async (/** @type {import('livekit-client').RemoteTrack} */ track, /** @type {import('livekit-client').RemoteTrackPublication} */ publication, /** @type {import('livekit-client').RemoteParticipant} */ participant) => {
+    let participants = get(remoteParticipants);
+    participants = participants.filter((el) => el.sid != participant.sid);
+    remoteParticipants.set(participants);
   };
   setLocalView = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
