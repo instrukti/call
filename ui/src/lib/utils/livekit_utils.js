@@ -81,3 +81,11 @@ export class LivekitUtils {
     this.localViewContainer.srcObject = stream;
   };
 }
+export const getJoinToken = async (/** @type {string} */ userName, /** @type {string} */ roomName) => {
+  const response = await fetch(`http://localhost:8090/api/getJoinToken?room=${roomName}&name=${userName}`, {
+    method: "GET",
+  });
+  const { token } = await response.json();
+  return token;
+};
+export const token = writable(null);

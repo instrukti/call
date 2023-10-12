@@ -29,7 +29,6 @@ func main() {
 			},
 			Middlewares: []echo.MiddlewareFunc{
 				apis.ActivityLogger(app),
-				apis.RequireRecordAuth(),
 			},
 		})
 		return nil

@@ -13,26 +13,28 @@ import (
 	lksdk "github.com/livekit/server-sdk-go"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/apis"
-	"github.com/pocketbase/pocketbase/models"
 )
 
 func GetJoinToken(c echo.Context, app *pocketbase.PocketBase) error {
 	roomName := c.QueryParam("room")
+	userName := c.QueryParam("name")
 	room, err := getRoom(c, app, roomName)
 	if err != nil {
 		return err
 	}
-	authRecord, _ := c.Get(apis.ContextAuthRecordKey).(*models.Record)
 	at := auth.NewAccessToken(os.Getenv("LIVEKIT_API_KEY"), os.Getenv("LIVEKIT_API_SECRET"))
 	grant := &auth.VideoGrant{
 		RoomJoin: true,
 		Room:     room.Name,
 	}
 	at.AddGrant(grant).
-		SetIdentity(authRecord.Id).
+		SetIdentity(userName).
 		SetValidFor(time.Duration(20) * time.Minute)
 	token, _ := at.ToJWT()
-	return c.String(http.StatusOK, token)
+	response := &TokenResponse{
+		Token: token,
+	}
+	return c.JSON(http.StatusOK, response)
 }
 
 func getRoom(c echo.Context, app *pocketbase.PocketBase, name string) (*livekit.Room, error) {
@@ -63,4 +65,8 @@ func createRooms(c echo.Context, app *pocketbase.PocketBase, roomClient *lksdk.R
 		return nil, apis.NewApiError(500, err.Error(), nil)
 	}
 	return room, nil
+}
+
+type TokenResponse struct {
+	Token string `json:"token"`
 }

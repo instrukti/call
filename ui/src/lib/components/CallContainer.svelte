@@ -6,42 +6,48 @@
   import { isChatHidden, isCallMaximized, isWhiteboardHidden, isWhiteboardMaximized } from "../stores/visibility";
   import { slide } from "svelte/transition";
   import ChatBody from "./ChatBody.svelte";
-  import { LivekitUtils, remoteParticipants } from "../utils/livekit_utils";
+  import { LivekitUtils, remoteParticipants, token } from "../utils/livekit_utils";
   /** @type {LivekitUtils}*/
   let livekitUtils;
   let showChatCanvas = false;
   let isMicOn = false;
   let isVideoOn = false;
+  let isSharingScreen = false;
   let isHandRaised = false;
   let recording = false;
   let hiddenControls = false;
   /** @type {HTMLMediaElement}*/
   let localViewContainer;
-  const toggle = (/** @type {"mic"|"video"|"hand"}*/ button) => {
-    switch (button) {
-      case "mic":
-        isMicOn = !isMicOn;
-        isMicOn ? livekitUtils.unMuteMic() : livekitUtils.muteMic();
-        break;
-      case "video":
-        isVideoOn = !isVideoOn;
-        isVideoOn ? livekitUtils.turnVideoOn() : livekitUtils.turnVideoOff();
-        break;
-      case "hand":
-        isHandRaised = !isHandRaised;
-        break;
-      default:
-        break;
+  const toggle = (/** @type {"mic"|"video"|"hand"|"screen"}*/ button) => {
+    if (livekitUtils) {
+      switch (button) {
+        case "mic":
+          isMicOn = !isMicOn;
+          isMicOn ? livekitUtils.unMuteMic() : livekitUtils.muteMic();
+          break;
+        case "video":
+          isVideoOn = !isVideoOn;
+          isVideoOn ? livekitUtils.turnVideoOn() : livekitUtils.turnVideoOff();
+          break;
+        case "screen":
+          isSharingScreen = !isSharingScreen;
+          isSharingScreen ? livekitUtils.shareScreen() : livekitUtils.stopSharing();
+          break;
+        case "hand":
+          isHandRaised = !isHandRaised;
+          break;
+        default:
+          break;
+      }
     }
   };
   const dispatch = createEventDispatcher();
   const maximize = () => dispatch("maximize");
   const minimize = () => dispatch("minimize");
   onMount(() => {
-    let token = new URL(window.location.href).searchParams.get("token");
-    if (token) {
+    if ($token) {
       setTimeout(async () => {
-        livekitUtils = new LivekitUtils(localViewContainer, token);
+        livekitUtils = new LivekitUtils(localViewContainer, $token);
         await livekitUtils.joinRoom();
         await livekitUtils.subscribeToEvents();
       }, 500);
@@ -126,17 +132,23 @@
           </div>
           <div class="flex-grow mt-3 flex flex-col space-y-4 justify-end">
             {#if !hiddenControls}
-              <div transition:slide={{ axis: "y", delay: 100 }}>
+              <div transition:slide={{ axis: "y", delay: 120 }}>
                 <Button color={isMicOn ? "primary" : "red"} on:click={() => toggle("mic")} class="!rounded-full md:!w-14 md:!h-14">
                   <Icon name={isMicOn ? "microphone" : "microphone-off"} />
                 </Button>
                 <Tooltip text="Mic {isMicOn ? 'On' : 'Off'}" />
               </div>
-              <div transition:slide={{ axis: "y", delay: 80 }}>
+              <div transition:slide={{ axis: "y", delay: 100 }}>
                 <Button color={isVideoOn ? "primary" : "red"} on:click={() => toggle("video")} class="!rounded-full md:!w-14 md:!h-14">
                   <Icon name={isVideoOn ? "video" : "video-off"} />
                 </Button>
                 <Tooltip text="Camera {isVideoOn ? 'On' : 'Off'}" />
+              </div>
+              <div transition:slide={{ axis: "y", delay: 80 }}>
+                <Button color={isSharingScreen ? "red" : "primary"} on:click={() => toggle("screen")} class="!rounded-full md:!w-14 md:!h-14">
+                  <Icon name={isSharingScreen ? "screen-share-off" : "screen-share"} />
+                </Button>
+                <Tooltip text={isSharingScreen ? "Stop Sharing" : "Share Screen"} />
               </div>
               <div transition:slide={{ axis: "y", delay: 60 }}>
                 <Button color={isHandRaised ? "red" : "primary"} on:click={() => toggle("hand")} class="!rounded-full md:!w-14 md:!h-14">
