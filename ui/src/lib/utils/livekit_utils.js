@@ -24,7 +24,6 @@ export class LivekitUtils {
   }
   joinRoom = async () => {
     await this.room.connect(this.wsURL, this.token);
-    await this.room.localParticipant.enableCameraAndMicrophone();
     await this.muteMic();
     await this.turnVideoOff();
     const participants = Array.from(this.room.participants.values()).filter((el) => el.sid != this.room.localParticipant.sid);
