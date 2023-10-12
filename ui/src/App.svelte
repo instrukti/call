@@ -50,7 +50,7 @@
       <Input bind:value={userName} placeholder="Enter Username" />
       <Input bind:value={roomName} placeholder="Enter A Room Name" />
       <Divider class="my-8">Or</Divider>
-      <Textarea placeholder="Paste your token" disabled={userName != "" || roomName != ""} />
+      <Textarea placeholder="Paste your token" bind:value={pastedToken} disabled={userName != "" || roomName != ""} />
       <Button class="w-full" color="primary" on:click={joinCall}>Join</Button>
     </div>
   </div>
