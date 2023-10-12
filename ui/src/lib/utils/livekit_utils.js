@@ -12,6 +12,7 @@ export class LivekitUtils {
   room;
   /** @type {string} */
   wsURL = "wss://instrukti-nf5brd5y.livekit.cloud";
+  // wsURL = "ws://localhost:7880";
   /** @type {string} */
   token;
   /** @type {HTMLMediaElement} */

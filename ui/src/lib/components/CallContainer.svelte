@@ -133,25 +133,25 @@
           <div class="flex-grow mt-3 flex flex-col space-y-4 justify-end">
             {#if !hiddenControls}
               <div transition:slide={{ axis: "y", delay: 120 }}>
-                <Button color={isMicOn ? "primary" : "red"} on:click={() => toggle("mic")} class="!rounded-full md:!w-14 md:!h-14">
+                <Button color={isMicOn ? "primary" : "red"} on:click={() => toggle("mic")} class="!rounded-full">
                   <Icon name={isMicOn ? "microphone" : "microphone-off"} />
                 </Button>
                 <Tooltip text="Mic {isMicOn ? 'On' : 'Off'}" />
               </div>
               <div transition:slide={{ axis: "y", delay: 100 }}>
-                <Button color={isVideoOn ? "primary" : "red"} on:click={() => toggle("video")} class="!rounded-full md:!w-14 md:!h-14">
+                <Button color={isVideoOn ? "primary" : "red"} on:click={() => toggle("video")} class="!rounded-full">
                   <Icon name={isVideoOn ? "video" : "video-off"} />
                 </Button>
                 <Tooltip text="Camera {isVideoOn ? 'On' : 'Off'}" />
               </div>
               <div transition:slide={{ axis: "y", delay: 80 }}>
-                <Button color={isSharingScreen ? "red" : "primary"} on:click={() => toggle("screen")} class="!rounded-full md:!w-14 md:!h-14">
+                <Button color={isSharingScreen ? "red" : "primary"} on:click={() => toggle("screen")} class="!rounded-full">
                   <Icon name={isSharingScreen ? "screen-share-off" : "screen-share"} />
                 </Button>
                 <Tooltip text={isSharingScreen ? "Stop Sharing" : "Share Screen"} />
               </div>
               <div transition:slide={{ axis: "y", delay: 60 }}>
-                <Button color={isHandRaised ? "red" : "primary"} on:click={() => toggle("hand")} class="!rounded-full md:!w-14 md:!h-14">
+                <Button color={isHandRaised ? "red" : "primary"} on:click={() => toggle("hand")} class="!rounded-full">
                   <Icon name={isHandRaised ? "hand-off" : "hand-stop"} />
                 </Button>
                 <Tooltip text="{isHandRaised ? 'Lower' : 'Raise'} Hand" />
@@ -163,14 +163,14 @@
                 <ReactionDropdown />
               </div>
               <div transition:slide={{ axis: "y" }}>
-                <Button color="red" class="!rounded-full md:!w-14 md:!h-14">
+                <Button color="red" class="!rounded-full">
                   <Icon name="phone-off" />
                 </Button>
                 <Tooltip text="End Call" />
               </div>
             {/if}
             <div>
-              <Button color="purple" on:click={() => (hiddenControls = !hiddenControls)} class="!rounded-full md:!w-14 md:!h-14">
+              <Button color="purple" on:click={() => (hiddenControls = !hiddenControls)} class="!rounded-full">
                 <Icon name={hiddenControls ? "menu-2" : "x"} />
               </Button>
             </div>

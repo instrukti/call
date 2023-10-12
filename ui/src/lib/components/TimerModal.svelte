@@ -4,7 +4,7 @@
   let showCenter = false;
 </script>
 
-<Button color="primary" on:click={() => (showCenter = true)} class="!rounded-full md:!w-14 md:!h-14">
+<Button color="primary" on:click={() => (showCenter = true)} class="!rounded-full">
   <Icon name="clock-hour-4" />
 </Button>
 <Tooltip text="Start Timer" />

@@ -2,7 +2,7 @@
   import { Button, Icon, Popover, PopoverBody } from "yesvelte";
 </script>
 
-<Button color="warning" class="!rounded-full md:!w-14 md:!h-14">
+<Button color="warning" class="!rounded-full">
   <Icon name="mood-smile" />
 </Button>
 <Popover trigger="hover" placement="top">
