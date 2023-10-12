@@ -10,7 +10,7 @@
   import { showScreenCaptureModal } from "./lib/utils/fabric_utils";
   import LoadingOverlay from "./lib/components/LoadingOverlay.svelte";
   import { onMount } from "svelte";
-  import { Button, Input } from "yesvelte";
+  import { Button, Divider, Input, Textarea } from "yesvelte";
   import { getJoinToken, token } from "./lib/utils/livekit_utils";
   let loading = true;
   onMount(() => {
@@ -18,11 +18,17 @@
       loading = false;
     };
   });
-  let roomName;
-  let userName;
+  let roomName = "";
+  let userName = "";
+  let pastedToken = "";
   const joinCall = async () => {
-    const joinToken = await getJoinToken(userName, roomName);
-    token.set(joinToken);
+    if (userName != "" || roomName != "") {
+      const joinToken = await getJoinToken(userName, roomName);
+      token.set(joinToken);
+    }
+    if (pastedToken != "") {
+      token.set(pastedToken);
+    }
   };
 </script>
 
@@ -43,6 +49,8 @@
     <div class="space-y-2 w-11/12 md:w-1/3">
       <Input bind:value={userName} placeholder="Enter Username" />
       <Input bind:value={roomName} placeholder="Enter A Room Name" />
+      <Divider class="my-8">Or</Divider>
+      <Textarea placeholder="Paste your token" disabled={userName != "" || roomName != ""} />
       <Button class="w-full" color="primary" on:click={joinCall}>Join</Button>
     </div>
   </div>

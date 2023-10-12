@@ -38,7 +38,7 @@ func GetJoinToken(c echo.Context, app *pocketbase.PocketBase) error {
 }
 
 func getRoom(c echo.Context, app *pocketbase.PocketBase, name string) (*livekit.Room, error) {
-	host := "http://localhost:7880"
+	host := os.Getenv("LIVEKIT_SERVER_URL")
 	roomClient := lksdk.NewRoomServiceClient(host, os.Getenv("LIVEKIT_API_KEY"), os.Getenv("LIVEKIT_API_SECRET"))
 	rooms, _ := roomClient.ListRooms(context.Background(), &livekit.ListRoomsRequest{
 		Names: []string{name},
