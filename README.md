@@ -48,6 +48,8 @@ To get started with our video calling app, follow these installation steps:
      go build .
      ```
 
+Before you can run the app, you would need to create a `.env` file with variables `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`, and `LIVEKIT_SERVER_URL`. Refer to [Livekit documentation](https://livekit.io/docs) for detailed instructions.
+
 ### Local Development
 
 Now that you have the project and its dependencies installed, follow these steps to set up the app locally:
@@ -63,6 +65,7 @@ Now that you have the project and its dependencies installed, follow these steps
      ```env
      LIVEKIT_API_KEY=devkey
      LIVEKIT_SERVER_URL=secret
+     LIVEKIT_SERVER_URL=http://localhost:7780
      ```
 
 3. **Run the App**:
@@ -95,7 +98,7 @@ We welcome contributions from the open-source community! If you'd like to contri
 2. **Clone Your Fork**:
 
    ```bash
-   git clone https://github.com/yourusername/your-project.git
+   git clone https://github.com/instrukti/call.git
    ```
 
 3. **Create a New Branch**:
@@ -130,12 +133,12 @@ We welcome contributions from the open-source community! If you'd like to contri
 
 ## Disclaimer
 
-This project is in a beta stage of development. It may contain bugs, incomplete features, or other issues. We recommend using it with caution in production environments.
+This project is an experimental app at this stage, and the development may be abandoned in favor it already existing apps. It may contain bugs, incomplete features, or other issues. We recommend using it with caution.
 
 **Please report any issues and contribute to the project to make it even better!**
 
 ---
 
-Thank you for considering our open-source video calling app. We hope you find it useful and welcome your feedback and contributions. If you have any questions or need assistance, please feel free to [contact us](mailto:your.email@example.com).
+Thank you for considering our open-source video calling app. We hope you find it useful and welcome your feedback and contributions. If you have any questions or need assistance, please feel free to contact us via issues or discussion.
 
 Happy coding!
