@@ -293,7 +293,6 @@ export class FabricUtils {
       imageCapture.grabFrame().then(function (imageBitmap) {
         // `imageBitmap` contains the screenshot of the entire screen
         // You can display it or save it as needed
-        console.log(imageBitmap);
         /** @type {HTMLCanvasElement} */
         // @ts-ignore
         const canvas = document.getElementById("capturedStill");

@@ -4,6 +4,9 @@ import { get, writable } from "svelte/store";
 export const videoResolutions = writable(VideoPresets.h720);
 /** @type {import('svelte/store').Writable<RemoteParticipant[]>} */
 export const remoteParticipants = writable([]);
+remoteParticipants.subscribe((val) => {
+  console.log(val);
+});
 export class LivekitUtils {
   /** @type {Room} */
   room;
@@ -24,8 +27,12 @@ export class LivekitUtils {
     await this.room.localParticipant.enableCameraAndMicrophone();
     await this.muteMic();
     await this.turnVideoOff();
+    const participants = Array.from(this.room.participants.values()).filter((el) => el.sid != this.room.localParticipant.sid);
+    remoteParticipants.set(participants);
   };
   subscribeToEvents = async () => {
+    await this.room.on("participantConnected", this.participantConnected);
+    await this.room.on("participantDisconnected", this.participantDisconnected);
     await this.room.on("trackSubscribed", this.trackSubscription);
     await this.room.on("trackUnsubscribed", this.trackUnsubscription);
   };
@@ -33,15 +40,13 @@ export class LivekitUtils {
     await this.room.disconnect();
   };
   muteMic = async () => {
-    await this.room.localParticipant.setMicrophoneEnabled(false);
+    if (this.room) await this.room.localParticipant.setMicrophoneEnabled(false);
   };
   unMuteMic = async () => {
-    await this.room.localParticipant.setMicrophoneEnabled(true, { noiseSuppression: true, echoCancellation: true });
+    if (this.room) await this.room.localParticipant.setMicrophoneEnabled(true, { noiseSuppression: true, echoCancellation: true });
   };
   turnVideoOff = async () => {
-    if (this.room) {
-      await this.room.localParticipant.setCameraEnabled(false);
-    }
+    if (this.room) await this.room.localParticipant.setCameraEnabled(false);
   };
   turnVideoOn = async () => {
     if (this.room) {
@@ -56,22 +61,28 @@ export class LivekitUtils {
     await this.room.localParticipant.setScreenShareEnabled(false);
   };
   trackSubscription = async (/** @type {import('livekit-client').RemoteTrack} */ track, /** @type {import('livekit-client').RemoteTrackPublication} */ publication, /** @type {import('livekit-client').RemoteParticipant} */ participant) => {
-    const element = track.attach();
-    const participants = Array.from(this.room.participants.values());
-    remoteParticipants.set(participants);
+    console.log(track.kind);
     setTimeout(() => {
-      element.id = track.kind + "_" + participant.identity;
-      element.classList.add("object-cover");
-      element.classList.add("rounded-full");
-      element.classList.add("!w-20");
-      element.classList.add("!h-20");
-      element.classList.add("md:!w-32");
-      element.classList.add("md:!h-32");
+      const element = track.attach();
+      element.id = track.kind + "_" + participant.sid;
+      if (track.kind === "video") {
+        element.classList.add("object-cover");
+        element.classList.add("rounded-full");
+        element.classList.add("!w-20");
+        element.classList.add("!h-20");
+        element.classList.add("md:!w-32");
+        element.classList.add("md:!h-32");
+      }
       const parentElement = document.getElementById(participant.sid);
       if (parentElement) parentElement.appendChild(element);
     }, 500);
   };
-  trackUnsubscription = async (/** @type {import('livekit-client').RemoteTrack} */ track, /** @type {import('livekit-client').RemoteTrackPublication} */ publication, /** @type {import('livekit-client').RemoteParticipant} */ participant) => {
+  trackUnsubscription = async (/** @type {import('livekit-client').RemoteTrack} */ track, /** @type {import('livekit-client').RemoteTrackPublication} */ publication, /** @type {import('livekit-client').RemoteParticipant} */ participant) => {};
+  participantConnected = async (/** @type {RemoteParticipant} */ participant) => {
+    const participants = Array.from(this.room.participants.values()).filter((el) => el.sid != this.room.localParticipant.sid);
+    remoteParticipants.set(participants);
+  };
+  participantDisconnected = async (/** @type {RemoteParticipant} */ participant) => {
     let participants = get(remoteParticipants);
     participants = participants.filter((el) => el.sid != participant.sid);
     remoteParticipants.set(participants);

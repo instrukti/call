@@ -12,7 +12,7 @@
   import { onMount } from "svelte";
   import { Button, Input } from "yesvelte";
   import { getJoinToken, token } from "./lib/utils/livekit_utils";
-  let loading = false;
+  let loading = true;
   onMount(() => {
     window.onload = () => {
       loading = false;

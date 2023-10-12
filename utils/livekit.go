@@ -57,7 +57,7 @@ func getRoom(c echo.Context, app *pocketbase.PocketBase, name string) (*livekit.
 func createRooms(c echo.Context, app *pocketbase.PocketBase, roomClient *lksdk.RoomServiceClient, name string) (*livekit.Room, error) {
 	room, err := roomClient.CreateRoom(context.Background(), &livekit.CreateRoomRequest{
 		Name:            name,
-		EmptyTimeout:    2 * 60, // 2 minutes
+		EmptyTimeout:    20 * 60, // 20 minutes
 		MaxParticipants: 2,
 	})
 	if err != nil {
