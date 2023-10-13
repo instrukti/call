@@ -23,9 +23,11 @@ func GetJoinToken(c echo.Context, app *pocketbase.PocketBase) error {
 		return err
 	}
 	at := auth.NewAccessToken(os.Getenv("LIVEKIT_API_KEY"), os.Getenv("LIVEKIT_API_SECRET"))
+	b := true
 	grant := &auth.VideoGrant{
-		RoomJoin: true,
-		Room:     room.Name,
+		RoomJoin:       true,
+		CanPublishData: &b,
+		Room:           room.Name,
 	}
 	at.AddGrant(grant).
 		SetIdentity(userName).
@@ -69,4 +71,7 @@ func createRooms(c echo.Context, app *pocketbase.PocketBase, roomClient *lksdk.R
 
 type TokenResponse struct {
 	Token string `json:"token"`
+}
+type BoolStruct struct {
+	Value string `json:"value"`
 }

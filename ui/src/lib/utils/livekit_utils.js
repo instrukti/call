@@ -1,5 +1,8 @@
-import { RemoteParticipant, Room, VideoPreset, VideoPresets } from "livekit-client";
+import { DataPacket_Kind, RemoteParticipant, Room, VideoPreset, VideoPresets } from "livekit-client";
 import { get, writable } from "svelte/store";
+import { boardDataJSON, updateBoard } from "./fabric_utils";
+const encoder = new TextEncoder();
+const decoder = new TextDecoder();
 /** @type {import('svelte/store').Writable<VideoPreset>} */
 export const videoResolutions = writable(VideoPresets.h720);
 /** @type {import('svelte/store').Writable<RemoteParticipant[]>} */
@@ -11,8 +14,8 @@ export class LivekitUtils {
   /** @type {Room} */
   room;
   /** @type {string} */
-  wsURL = "wss://instrukti-nf5brd5y.livekit.cloud";
-  // wsURL = "ws://localhost:7880";
+  // wsURL = "wss://instrukti-nf5brd5y.livekit.cloud";
+  wsURL = "ws://localhost:7880";
   /** @type {string} */
   token;
   /** @type {HTMLMediaElement} */
@@ -35,6 +38,7 @@ export class LivekitUtils {
     await this.room.on("participantDisconnected", this.participantDisconnected);
     await this.room.on("trackSubscribed", this.trackSubscription);
     await this.room.on("trackUnsubscribed", this.trackUnsubscription);
+    await this.room.on("dataReceived", this.handleDataRecieved);
   };
   leaveRoom = async () => {
     await this.room.disconnect();
@@ -87,9 +91,23 @@ export class LivekitUtils {
     participants = participants.filter((el) => el.sid != participant.sid);
     remoteParticipants.set(participants);
   };
+  handleDataRecieved = async (/** @type {Uint8Array} */ payload, /** @type {RemoteParticipant} */ participant, /** @type {DataPacket_Kind} */ kind, /** @type {string} */ topic) => {
+    const strData = decoder.decode(payload);
+    const { type, data } = JSON.parse(strData);
+    if (type === "board") {
+      boardDataJSON.set(data);
+      setTimeout(() => {
+        updateBoard.set(Date.now());
+      }, 100);
+    }
+  };
   setLocalView = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
     this.localViewContainer.srcObject = stream;
+  };
+  publishData = async (/** @type {string} */ strData) => {
+    const data = encoder.encode(strData);
+    await this.room.localParticipant.publishData(data, DataPacket_Kind.LOSSY);
   };
 }
 export const getJoinToken = async (/** @type {string} */ userName, /** @type {string} */ roomName) => {

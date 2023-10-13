@@ -8,6 +8,8 @@ export const activeButton = writable("select");
 export const showScreenCaptureModal = writable(false);
 export const fabricUtilsStore = writable(null);
 export const boardDataJSON = writable(null);
+export const publish = writable(null);
+export const updateBoard = writable(null);
 export class FabricUtils {
   isDrawing = writable(false);
   /** @type {import("svelte/store").Unsubscriber | null} */
@@ -41,12 +43,16 @@ export class FabricUtils {
     if (get(boardDataJSON)) {
       this.canvas.loadFromJSON(get(boardDataJSON), async () => {});
     }
+    updateBoard.subscribe(() => {
+      this.canvas.loadFromJSON(get(boardDataJSON), async () => {});
+    });
     this.setZoom();
     this.defineModifiedListener();
   }
   clearBoard = () => {
     this.canvas.clear();
     this.resetEvents();
+    this.saveBoard();
   };
   resetZoom = () => {
     this.resetEvents();
@@ -309,6 +315,7 @@ export class FabricUtils {
   };
   saveBoard = debounce(() => {
     boardDataJSON.set(this.canvas.toJSON());
+    publish.set(Date.now());
     // To be implemented when pocketbase backend is started
   });
   setFixed = (/** @type {Boolean} */ isFixed) => {

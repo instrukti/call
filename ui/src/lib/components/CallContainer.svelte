@@ -7,6 +7,7 @@
   import { slide } from "svelte/transition";
   import ChatBody from "./ChatBody.svelte";
   import { LivekitUtils, remoteParticipants, token } from "../utils/livekit_utils";
+  import { boardDataJSON, publish } from "../utils/fabric_utils";
   /** @type {LivekitUtils}*/
   let livekitUtils;
   let showChatCanvas = false;
@@ -50,6 +51,10 @@
         livekitUtils = new LivekitUtils(localViewContainer, $token);
         await livekitUtils.joinRoom();
         await livekitUtils.subscribeToEvents();
+        publish.subscribe((val) => {
+          const payload = { type: "board", data: $boardDataJSON };
+          livekitUtils.publishData(JSON.stringify(payload));
+        });
       }, 500);
     }
   });
