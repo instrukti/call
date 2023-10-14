@@ -7,9 +7,10 @@ const decoder = new TextDecoder();
 export const videoResolutions = writable(VideoPresets.h720);
 /** @type {import('svelte/store').Writable<RemoteParticipant[]>} */
 export const remoteParticipants = writable([]);
-remoteParticipants.subscribe((val) => {
-  console.log(val);
-});
+/** @type {import('svelte/store').Writable<Object[]>} */
+export const messages = writable([]);
+/** @type {import('svelte/store').Writable<Object>} */
+export const newMessage = writable(null);
 export class LivekitUtils {
   /** @type {Room} */
   room;
@@ -32,6 +33,9 @@ export class LivekitUtils {
     await this.turnVideoOff();
     const participants = Array.from(this.room.participants.values()).filter((el) => el.sid != this.room.localParticipant.sid);
     remoteParticipants.set(participants);
+    newMessage.subscribe((val) => {
+      if (val) this.sendMessage(val.message);
+    });
   };
   subscribeToEvents = async () => {
     await this.room.on("participantConnected", this.participantConnected);
@@ -99,6 +103,9 @@ export class LivekitUtils {
       setTimeout(() => {
         updateBoard.set(Date.now());
       }, 100);
+    } else if (type === "chat") {
+      const currentMessages = get(messages);
+      messages.set([...currentMessages, { sender: data.sender, message: data.message }]);
     }
   };
   setLocalView = async () => {
@@ -108,6 +115,13 @@ export class LivekitUtils {
   publishData = async (/** @type {string} */ strData) => {
     const data = encoder.encode(strData);
     await this.room.localParticipant.publishData(data, DataPacket_Kind.LOSSY);
+  };
+  sendMessage = async (/** @type {string} */ message) => {
+    const currentMessages = get(messages);
+    messages.set([...currentMessages, { sender: "me", message }]);
+    const sender = this.room.localParticipant.identity;
+    const payload = { type: "chat", data: { sender, message } };
+    this.publishData(JSON.stringify(payload));
   };
 }
 export const getJoinToken = async (/** @type {string} */ userName, /** @type {string} */ roomName) => {
