@@ -51,7 +51,7 @@
         livekitUtils = new LivekitUtils(localViewContainer, $token);
         await livekitUtils.joinRoom();
         await livekitUtils.subscribeToEvents();
-        publish.subscribe((val) => {
+        publish.subscribe(() => {
           const payload = { type: "board", data: $boardDataJSON };
           livekitUtils.publishData(JSON.stringify(payload));
         });
