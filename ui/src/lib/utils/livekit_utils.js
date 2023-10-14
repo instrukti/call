@@ -89,6 +89,12 @@ export class LivekitUtils {
   participantConnected = async (/** @type {RemoteParticipant} */ participant) => {
     const participants = Array.from(this.room.participants.values()).filter((el) => el.sid != this.room.localParticipant.sid);
     remoteParticipants.set(participants);
+    setTimeout(() => {
+      if (get(boardDataJSON) !== null) {
+        const payload = { type: "board", data: get(boardDataJSON) };
+        this.publishData(JSON.stringify(payload));
+      }
+    }, 500);
   };
   participantDisconnected = async (/** @type {RemoteParticipant} */ participant) => {
     let participants = get(remoteParticipants);
@@ -98,7 +104,7 @@ export class LivekitUtils {
   handleDataRecieved = async (/** @type {Uint8Array} */ payload, /** @type {RemoteParticipant} */ participant, /** @type {DataPacket_Kind} */ kind, /** @type {string} */ topic) => {
     const strData = decoder.decode(payload);
     const { type, data } = JSON.parse(strData);
-    if (type === "board") {
+    if (type === "board" && data !== null) {
       boardDataJSON.set(data);
       setTimeout(() => {
         updateBoard.set(Date.now());
