@@ -39,13 +39,6 @@ To get started with our video calling app, follow these installation steps:
      ```bash
      cd ui
      npm install
-     npm run build
-     ```
-
-   - Finally, build the executable
-     ```bash
-     cd ..
-     go build .
      ```
 
 3. **Set Up Livekit Server**:
@@ -67,10 +60,25 @@ To get started with our video calling app, follow these installation steps:
    - Update the endpoints for the UI
      ```javascript
      export const PB_URL = "http://localhost:8090";
-     export const WS_URL = "ws://localhost:7880"; //wss://instrukti-nf5brd5y.livekit.cloud
+     export const WS_URL = "ws://localhost:7880";
      ```
 
-6. **Run the App (DEV)**:
+6. **Build the app**
+
+   - Build Frontend
+
+     ```bash
+     cd ui/
+     npm run build
+     ```
+
+   - Build Executable
+     ```bash
+     cd ..
+     go build .
+     ```
+
+7. **Run the App (DEV)**:
 
    - **_DEVELOPMENT_**
 
@@ -93,7 +101,7 @@ To get started with our video calling app, follow these installation steps:
        ./call serve
        ```
 
-7. **Access the App**:
+8. **Access the App**:
 
    To access the UI, open your web browser and visit `http://localhost:8090/`, if you have only started backend. Visit `http://localhost:5173/` if you have started the svelte dev server. To access pocketbase admin UI, visit `http://localhost:8090/_/`.
 
