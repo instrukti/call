@@ -168,7 +168,7 @@
                 <ReactionDropdown />
               </div>
               <div transition:slide={{ axis: "y" }}>
-                <Button color="red" class="!rounded-full">
+                <Button color="red" class="!rounded-full" on:click={livekitUtils.leaveRoom}>
                   <Icon name="phone-off" />
                 </Button>
                 <Tooltip text="End Call" />

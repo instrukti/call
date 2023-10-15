@@ -12,6 +12,8 @@ export const remoteParticipants = writable([]);
 export const messages = writable([]);
 /** @type {import('svelte/store').Writable<Object>} */
 export const newMessage = writable(null);
+/** @type {import('svelte/store').Writable<string>} */
+export const token = writable(null);
 export class LivekitUtils {
   /** @type {Room} */
   room;
@@ -46,6 +48,7 @@ export class LivekitUtils {
   };
   leaveRoom = async () => {
     await this.room.disconnect();
+    token.set(null);
   };
   muteMic = async () => {
     if (this.room) await this.room.localParticipant.setMicrophoneEnabled(false);
@@ -137,4 +140,3 @@ export const getJoinToken = async (/** @type {string} */ userName, /** @type {st
   const { token } = await response.json();
   return token;
 };
-export const token = writable(null);
