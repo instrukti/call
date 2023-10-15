@@ -150,7 +150,7 @@ We welcome contributions from the open-source community! If you'd like to contri
 
 ## Disclaimer
 
-This project is an experimental app at this stage, and the development may be abandoned in favor it already existing apps. It may contain bugs, incomplete features, or other issues. We recommend using it with caution.
+This project is an experimental proof of concept app at this stage, and the development may be abandoned in favor it already existing apps. It may contain bugs, incomplete features, or other issues. We recommend using it with caution.
 
 **Please report any issues and contribute to the project to make it even better!**
 
