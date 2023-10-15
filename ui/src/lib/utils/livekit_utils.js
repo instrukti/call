@@ -1,6 +1,7 @@
 import { DataPacket_Kind, RemoteParticipant, Room, VideoPreset, VideoPresets } from "livekit-client";
 import { get, writable } from "svelte/store";
 import { boardDataJSON, updateBoard } from "./fabric_utils";
+import { PB_URL, WS_URL } from "../consts";
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 /** @type {import('svelte/store').Writable<VideoPreset>} */
@@ -15,8 +16,7 @@ export class LivekitUtils {
   /** @type {Room} */
   room;
   /** @type {string} */
-  // wsURL = "wss://instrukti-nf5brd5y.livekit.cloud";
-  wsURL = "ws://localhost:7880";
+  wsURL = WS_URL;
   /** @type {string} */
   token;
   /** @type {HTMLMediaElement} */
@@ -131,7 +131,7 @@ export class LivekitUtils {
   };
 }
 export const getJoinToken = async (/** @type {string} */ userName, /** @type {string} */ roomName) => {
-  const response = await fetch(`http://localhost:8090/api/getJoinToken?room=${roomName}&name=${userName}`, {
+  const response = await fetch(`${PB_URL}/api/getJoinToken?room=${roomName}&name=${userName}`, {
     method: "GET",
   });
   const { token } = await response.json();
