@@ -4,8 +4,7 @@
 
 - [Introduction](#introduction)
 - [Getting Started](#getting-started)
-  - [Installation](#installation)
-  - [Local Development](#local-development)
+  - [Installation And Local Development](#installation-and-local-development)
 - [Contributing](#contributing)
 - [Disclaimer](#disclaimer)
 
