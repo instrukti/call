@@ -15,7 +15,7 @@ Welcome to our open-source video calling app project! This application leverages
 
 ## Getting Started
 
-### Installation
+### Installation And Local Development
 
 To get started with our video calling app, follow these installation steps:
 
@@ -48,17 +48,11 @@ To get started with our video calling app, follow these installation steps:
      go build .
      ```
 
-Before you can run the app, you would need to create a `.env` file with variables `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`, and `LIVEKIT_SERVER_URL`. Refer to [Livekit documentation](https://livekit.io/docs) for detailed instructions.
-
-### Local Development
-
-Now that you have the project and its dependencies installed, follow these steps to set up the app locally:
-
-1. **Set Up Livekit Server**:
+3. **Set Up Livekit Server**:
 
    You'll need to configure a Livekit server to handle the video calling. Refer to the [Livekit documentation](https://livekit.io/docs) for detailed instructions.
 
-2. **Configuration**:
+4. **Configuration**:
 
    - Create a `.env` file in the root directory and configure the app:
 
@@ -68,22 +62,30 @@ Now that you have the project and its dependencies installed, follow these steps
      LIVEKIT_SERVER_URL=http://localhost:7780
      ```
 
-3. **Run the App**:
+5. **Run the App (DEV)**:
 
-   - Start the Pocketbase server, this starts up a pocketbase server with UI already embeded:
+   - **_DEVELOPMENT_**
 
-     ```bash
-     go run main.go serve
-     ```
+     - Start the Pocketbase server, this starts up a pocketbase server with UI already embeded:
 
-   - In case you are modifying frontend, you may also start the svelte dev server:
+       ```bash
+       go run main.go serve
+       ```
 
-     ```bash
-     cd ui
-     npm run dev -- --open
-     ```
+     - In case you are modifying frontend, you may also start the svelte dev server:
+       ```bash
+       cd ui
+       npm run dev -- --open
+       ```
 
-4. **Access the App**:
+   - **_PRODUCTION_**
+
+     - Run the executable
+       ```bash
+       ./call serve
+       ```
+
+6. **Access the App**:
 
    To access the UI, open your web browser and visit `http://localhost:8090/`, if you have only started backend. Visit `http://localhost:5173/` if you have started the svelte dev server. To access pocketbase admin UI, visit `http://localhost:8090/_/`.
 
